@@ -77,7 +77,7 @@ xgboost==3.0.3
 
 ## Notes
 
-*Feel free to add any personal notes here for the reader — like tips, insights, or reminders about the project, your learning journey, or usage advice.*
+ have documented my entire workflow in projectFlow.txt. If you use this project, feel free to drop me a message on LinkedIn—I'd love to connect, improve this work together, and learn more. Also, don’t hesitate to try different models; with XGBoost, you can achieve nearly 99% accura
 
 ---
 
