@@ -1,0 +1,126 @@
+
+# Phase 1: Data Collection and Cleaning
+
+- Dataset used: premiums.xlsx
+
+1- Column names standardized
+
+  - Converted all column names to lowercase
+  - Replaced spaces with underscores
+
+2- Missing values handled
+
+  - Dropped 11 rows with missing smoking\_status
+  - Dropped 2 rows with missing employment\_status
+  - Dropped 13 rows with missing income\_level
+
+3- Corrected invalid entries
+
+  - Negative values in number\_of\_dependants (-1 to -3) converted to absolute values
+
+4- Outlier detection and removal
+
+  - Dropped 58 rows where age > 100
+  - Used IQR method on income\_in\_lakh
+
+    - Upper bound approx 67 lakh
+    - 99% of values are under 100 lakh
+    - Dropped rows with income\_in\_lakh > 100
+
+5- Cleaned categorical values
+
+  - Merged 'smoking = 0' and 'Does not smoke' into 'No smoking' in smoking\_status
+
+6- Saved cleaned dataset as Preprocessed\_premium.xlsx
+
+---
+
+# Phase 2: Data Preprocessing and Feature Engineering
+
+1- Mapped categorical values
+
+  - smoking\_status converted to smoking\_score, 'No smoking' --> 0
+
+2- Scaled numerical columns
+
+  - Scaled age, income\_in\_lakh, number\_of\_dependants....
+
+4- Label encoded categorical features like ['region','gender']..
+
+5- Checked multicollinearity using VIF (variance inflation factor)
+  -Not found any column VIF >=10
+
+
+
+---
+
+# Phase 3: Model Training and Error Analysis
+
+1- Trained linear regression model
+
+  - Train score: 0.9274
+  - Test score: 0.9273
+  - Used 30% test split from 50,000 records
+
+2- Analyzed coefficients to understand attribute impact on prediction
+
+3- Plotted % error
+
+  - Error range: -127% to 50%
+  - 49.27% of predictions had error greater than 10% on test data
+
+4- Binned data with more than 10% error
+
+  - Plotted age vs % error
+  - Found max error for age < =25
+
+5- Conclusion from error analysis:
+
+  - Highest % error for age below 25 or 26 group 
+  - Lower income and fewer dependents also associated with high error
+  - Likely due to age being a common factor
+  - About 65% of the dataset has age <=25 in bin, making age a major contributor to prediction error
+
+6- Used model segmentation approach:
+
+  - Trained one model on data where age > 25 (data\_set\_rest)
+  - Trained another model on data where age <=25 (data\_set\_young)
+
+6- After training a linear regression model on data\_set\_rest:
+
+  - Achieved accuracy of 95% in both train and test
+  - (Note: For more accuracy, XGBoost gives almost 99%)
+  - About 20% of train data have >10% absolute error
+  - Just 2% of test data have >20% to 30% absolute error
+
+7- After training a linear regression model on data\_set\_young:
+
+  - Accuracy is very poor (\~60%)
+  - Analysis shows no linear relationship with the target, only one feature has low relation
+  - Tried non-linear models (XGBoost, polynomial regression, decision tree) but none achieved more than 60% accuracy
+  - Conclusion: Dataset for age < 25 does not have a proper relationship with the target; more relevant features are needed for this group
+8- Model export:
+  -save the both model as 
+    -reg_model_rest --> for age >25
+    -poly_model_pipeline--> for age <=25
+---
+
+# Final Summary
+
+1- The probability that the final_model_A95_rest(age>25) predicts with ≤10% error is 78% (since 78% of test samples fall in that error range)
+
+- For the subset where age > 25, the model achieves an overall accuracy of 95%
+  However, focusing on error margins:
+
+  - There is a 78% chance that the model’s prediction error will be within 10%
+  - Around 20% of predictions exceed 10% error, with a small 2% exceeding 20% error
+
+2- For users with age less than 25, the model’s prediction accuracy is limited
+ — only about 60% chance of a valid prediction due to insufficient data and model performance.
+ -After applying various non-linear models like XGBoost, Polynomial Regression, and Decision Tree, 
+ -the train and test scores are around 70% and 60% respectively
+ - This suggests the dataset does not have a strong or clear relationship with the target variable.
+ - More informative features or additional attributes may be needed—especially  age <=25—to improve model performance.
+
+
+
