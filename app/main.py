@@ -57,7 +57,7 @@ with st.container():
     st.markdown("---")
 
     age = st.number_input("Age", min_value=18, max_value=99)
-    number_of_dependants = st.number_input("Number of Dependants", min_value=0, max_value=10, step=1)
+    number_of_dependants = st.number_input("Number of Dependents", min_value=0, max_value=10, step=1)
     gender = st.selectbox("Gender", ["Male", "Female"])
     region = st.selectbox("Region", ["Northwest", "Southeast", "Northeast", "Southwest"])
     marital_status = st.selectbox("Marital Status", ["Unmarried", "Married"])
