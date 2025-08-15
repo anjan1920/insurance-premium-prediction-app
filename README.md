@@ -84,7 +84,7 @@ I have documented my entire workflow in projectFlow.txt. If you use this project
 ## Author
 
 **Anjan Das**
-[LinkedIn](www.linkedin.com/in/anjan-das-22b278236) 
+www.linkedin.com/in/anjan-das-22b278236 
 
 ---
 
